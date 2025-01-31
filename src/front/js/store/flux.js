@@ -37,7 +37,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				};
 
 				try {
-					const response = await fetch("https://potential-spork-7pvx7qxxxj9c64x-3001.app.github.dev/api/login", requestOptions);
+					const response = await fetch("https://silver-space-garbanzo-wr96jr4q74q9fg4p-3001.app.github.dev/api/login", requestOptions);
 					const result = await response.json();
 
 					if (response.status === 200) {
@@ -52,7 +52,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			getProfile: async () => {
 				let token = localStorage.getItem("token")
 				try {
-					const response = await fetch("https://potential-spork-7pvx7qxxxj9c64x-3001.app.github.dev/api/profile", {
+					const response = await fetch("https://silver-space-garbanzo-wr96jr4q74q9fg4p-3001.app.github.dev/api/profile", {
 						method: "GET",
 						headers: {
 							"Authorization": `Bearer ${token}`
@@ -71,18 +71,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 			logout:()=>{
 				//borrar el token del localStorage
 			},
-			getMessage: async () => {
-				try {
-					// fetching data from the backend
-					const resp = await fetch(process.env.BACKEND_URL + "/api/hello")
-					const data = await resp.json()
-					setStore({ message: data.message })
-					// don't forget to return something, that is how the async resolves
-					return data;
-				} catch (error) {
-					console.log("Error loading message from backend", error)
-				}
-			},
+			// getMessage: async () => {
+			// 	try {
+			// 		// fetching data from the backend
+			// 		const resp = await fetch(process.env.BACKEND_URL + "/api/hello")
+			// 		const data = await resp.json()
+			// 		setStore({ message: data.message })
+			// 		// don't forget to return something, that is how the async resolves
+			// 		return data;
+			// 	} catch (error) {
+			// 		console.log("Error loading message from backend", error)
+			// 	}
+			// },
 			changeColor: (index, color) => {
 				//get the store
 				const store = getStore();

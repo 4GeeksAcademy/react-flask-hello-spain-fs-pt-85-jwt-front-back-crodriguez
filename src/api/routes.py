@@ -5,6 +5,7 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
+from sqlalchemy import select
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 
 api = Blueprint('api', __name__)
@@ -14,15 +15,31 @@ CORS(api)
 
 
 
+# @api.route('/user', methods=['GET'])
+# def handle_hello():
+
+#     response_body = {
+#         "msg": "Hello, this is your GET /user response "
+#     }
+
+#     return jsonify(response_body), 200
+
 @api.route('/user', methods=['GET'])
 def handle_hello():
+    try:
+        data = db.session.scalars(select(User)).all()
+        results = list(map(lambda item: item.serialize(), data))
 
-    response_body = {
-        "msg": "Hello, this is your GET /user response "
-    }
+        response_body = {
+            "msg": "Hello, this is your GET /user response ",
+            "results": results
+        }
 
-    return jsonify(response_body), 200
+        return jsonify(response_body), 200
 
+    except Exception as e:
+        print(f"Error en /user: {e}")
+        return jsonify({"error": "An error occurred"}), 500
 
 # Create a route to authenticate your users and return JWTs. The
 # create_access_token() function is used to actually generate the JWT.
