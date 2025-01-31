@@ -70,6 +70,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			logout:()=>{
 				//borrar el token del localStorage
+				localStorage.removeItem("token", result.access_token)
+			
 			},
 			// getMessage: async () => {
 			// 	try {

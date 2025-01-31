@@ -10,11 +10,11 @@ export const LoginForm = () => {
 
     async function handleSubmit(e) {
         e.preventDefault()
-       let logged =  actions.login(email,password);
+       let logged =  await actions.login(email,password);
        if (logged) {
             navigate("/profile")
        }
-        
+       
     }
 
     return (
