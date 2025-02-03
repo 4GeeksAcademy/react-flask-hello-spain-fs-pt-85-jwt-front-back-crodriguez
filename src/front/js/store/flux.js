@@ -3,18 +3,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 		store: {
 			message: null,
 			auth: false,
-			demo: [
-				{
-					title: "FIRST",
-					background: "white",
-					initial: "white"
-				},
-				{
-					title: "SECOND",
-					background: "white",
-					initial: "white"
-				}
-			]
+			user: null,
+			demo: []
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -42,6 +32,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					if (response.status === 200) {
 						localStorage.setItem("token", result.access_token)
+						setStore({ auth: true, user: { email } });
 						return true
 					}
 				} catch (error) {
@@ -68,9 +59,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 				//crear un nuevo endpoint que se llame verificacion de token
 				//la peticion en la funcion tokenVerify del front deberia actualizar un estado auth:
 			},
-			logout:()=>{
-				//borrar el token del localStorage
-				localStorage.removeItem("token", result.access_token)
+			logout: () => {
+                localStorage.removeItem("token");
+                setStore({ auth: false, user: null });
 			
 			},
 			// getMessage: async () => {
@@ -85,20 +76,20 @@ const getState = ({ getStore, getActions, setStore }) => {
 			// 		console.log("Error loading message from backend", error)
 			// 	}
 			// },
-			changeColor: (index, color) => {
-				//get the store
-				const store = getStore();
+			// changeColor: (index, color) => {
+			// 	//get the store
+			// 	const store = getStore();
 
-				//we have to loop the entire demo array to look for the respective index
-				//and change its color
-				const demo = store.demo.map((elm, i) => {
-					if (i === index) elm.background = color;
-					return elm;
-				});
+			// 	//we have to loop the entire demo array to look for the respective index
+			// 	//and change its color
+			// 	const demo = store.demo.map((elm, i) => {
+			// 		if (i === index) elm.background = color;
+			// 		return elm;
+			// 	});
 
-				//reset the global store
-				setStore({ demo: demo });
-			}
+			// 	//reset the global store
+			// 	setStore({ demo: demo });
+			// }
 		}
 	};
 };
