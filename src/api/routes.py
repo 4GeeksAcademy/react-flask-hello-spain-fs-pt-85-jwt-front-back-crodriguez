@@ -57,6 +57,29 @@ def login():
     except:
          return jsonify({"msg": "Bad email or password"}), 401
 
+@api.route("/signup", methods=["POST"])
+def signup():
+    try:
+        email = request.json.get("email", None)
+        password = request.json.get("password", None)
+        user = db.session.execute(db.select(User).filter_by(email=email)).scalar_one()
+
+        if email == user.email or password == user.password:
+            access_token = create_access_token(identity=email)
+            return jsonify(access_token=access_token), 200
+            
+    except:
+         return jsonify({"msg": "Error creating user"}), 401
+
+@api.route('/verificacion_token', methods=['GET'])
+def verificacion_token():
+    try:
+        verify_jwt_in_request()
+        token_data = get_jwt()
+        
+        return jsonify({"auth": True, "token_data": token_data}), 200
+    except:
+        return jsonify({"auth": False}), 401
 
 # Protect a route with jwt_required, which will kick out requests
 # without a valid JWT present.

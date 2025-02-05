@@ -8,6 +8,39 @@ const getState = ({ getStore, getActions, setStore }) => {
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
+			signup: async (email, password) => {
+
+
+				const myHeaders = new Headers();
+				myHeaders.append("Content-Type", "application/json");
+
+				const raw = JSON.stringify({
+					"email": email,
+					"password": password
+				});
+
+				const requestOptions = {
+					method: "POST",
+					headers: myHeaders,
+					body: raw,
+					redirect: "follow"
+				};
+
+				try {
+					const response = await fetch("https://silver-space-garbanzo-wr96jr4q74q9fg4p-3001.app.github.dev/api/signup", requestOptions);
+					const result = await response.json();
+
+					if (response.status === 200) {
+						// localStorage.setItem("token", result.access_token)
+						// setStore({ auth: true, user: { email } });
+						return true
+					}
+				} catch (error) {
+					console.error(error);
+					return false;
+				};
+			},
+			
 			login: async (email, password) => {
 
 
@@ -55,10 +88,32 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error(error);
 				};
 			},
-			tokenVerify:()=>{
-				//crear un nuevo endpoint que se llame verificacion de token
-				//la peticion en la funcion tokenVerify del front deberia actualizar un estado auth:
-			},
+			
+			//crear un nuevo endpoint que se llame verificacion de token
+			//la peticion en la funcion tokenVerify del front deberia actualizar un estado auth:
+			tokenVerify: async () => {
+                try {
+                    const token = localStorage.getItem("token");
+                    if (!token) {
+                        setStore({ auth: false, user: null });
+                        return;
+                    }
+
+                    const response = await fetch("https://silver-space-garbanzo-wr96jr4q74q9fg4p-3001.app.github.dev/api/verificacion_token", {
+                        method: "GET",
+                        headers: {
+                            "Authorization": `Bearer ${token}`
+                        },
+                    });
+
+                    const data = await response.json();
+                    setStore({ auth: data.auth });
+                } catch (error) {
+                    console.error("No se pudo verificar el token:", error);
+                    setStore({ auth: false, user: null });
+                }
+            },
+		
 			logout: () => {
                 localStorage.removeItem("token");
                 setStore({ auth: false, user: null });

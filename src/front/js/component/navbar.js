@@ -25,6 +25,9 @@ export const Navbar = () => {
 							<button className="btn btn-danger" onClick={handleLogout}>Logout</button>
 						</>
                     ) : null}
+					<Link to="/signup">
+                            <button className="btn btn-primary me-2">Register</button> 
+                    </Link>
 				</div>
 			</div>
 		</nav>
