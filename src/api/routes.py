@@ -62,11 +62,14 @@ def signup():
     try:
         email = request.json.get("email", None)
         password = request.json.get("password", None)
-        user = db.session.execute(db.select(User).filter_by(email=email)).scalar_one()
+        is_active = request.json.get("is_active", None)
+        user = User(email = email, password = password, is_active = is_active)
+        json= request.get_json()
 
-        if email == user.email or password == user.password:
-            access_token = create_access_token(identity=email)
-            return jsonify(access_token=access_token), 200
+        db.session.add(user)
+        db.session.commit()
+       
+        return jsonify([]), 200
             
     except:
          return jsonify({"msg": "Error creating user"}), 401
