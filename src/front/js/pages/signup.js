@@ -2,7 +2,7 @@ import React, {useState, useContext} from "react";
 import { Context } from "../store/appContext";
 import { Link, useNavigate } from "react-router-dom";
 
-export const SignupForm = () => {
+export const Signup = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const {store,actions} = useContext(Context)
