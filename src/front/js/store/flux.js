@@ -8,37 +8,39 @@ const getState = ({ getStore, getActions, setStore }) => {
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
+			// 
+			
 			signup: async (email, password) => {
+                const myHeaders = new Headers();
+                myHeaders.append("Content-Type", "application/json");
 
+                const raw = JSON.stringify({
+                    email: email,
+                    password: password
+                });
 
-				const myHeaders = new Headers();
-				myHeaders.append("Content-Type", "application/json");
+                const requestOptions = {
+                    method: "POST",
+                    headers: myHeaders,
+                    body: raw,
+                    redirect: "follow"
+                };
 
-				const raw = JSON.stringify({
-					"email": email,
-					"password": password
-				});
-
-				const requestOptions = {
-					method: "POST",
-					headers: myHeaders,
-					body: raw,
-					redirect: "follow"
-				};
-
-				try {
-					const response = await fetch("https://silver-space-garbanzo-wr96jr4q74q9fg4p-3001.app.github.dev/api/signup", requestOptions);
-					const result = await response.json();
-
-					if (response.status === 200) {
-						// localStorage.setItem("token", result.access_token)
-						// setStore({ auth: true, user: { email } });
-						return true
+                try{
+					const response = await fetch("https://vigilant-funicular-q79rg7x5qxxwf4qxp-3001.app.github.dev/api/sign_up", requestOptions);
+					if(response.headers.get("Content-Type")?.includes("application/json")){
+						const result = await response.json();
+						if (response.status === 201) {
+							return true;
+						}
+					} else {
+						console.error("Respuesta del servidor no es JSON:", await response.text());
+						return false;
 					}
 				} catch (error) {
 					console.error(error);
 					return false;
-				};
+				}
 			},
 			
 			login: async (email, password) => {
@@ -60,7 +62,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				};
 
 				try {
-					const response = await fetch("https://silver-space-garbanzo-wr96jr4q74q9fg4p-3001.app.github.dev/api/login", requestOptions);
+					const response = await fetch("https://vigilant-funicular-q79rg7x5qxxwf4qxp-3001.app.github.dev/api/log_in", requestOptions);
 					const result = await response.json();
 
 					if (response.status === 200) {
@@ -76,7 +78,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			getProfile: async () => {
 				let token = localStorage.getItem("token")
 				try {
-					const response = await fetch("https://silver-space-garbanzo-wr96jr4q74q9fg4p-3001.app.github.dev/api/profile", {
+					const response = await fetch("https://vigilant-funicular-q79rg7x5qxxwf4qxp-3001.app.github.dev/api/profile", {
 						method: "GET",
 						headers: {
 							"Authorization": `Bearer ${token}`
@@ -99,7 +101,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                         return;
                     }
 
-                    const response = await fetch("https://silver-space-garbanzo-wr96jr4q74q9fg4p-3001.app.github.dev/api/verificacion_token", {
+                    const response = await fetch("https://vigilant-funicular-q79rg7x5qxxwf4qxp-3001.app.github.dev/api/verificacion_token", {
                         method: "GET",
                         headers: {
                             "Authorization": `Bearer ${token}`
